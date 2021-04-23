@@ -7,6 +7,7 @@
 
 namespace KAGG\OCP;
 
+use WP_Post;
 use WP_Query;
 
 /**
@@ -30,6 +31,7 @@ class Main {
 		add_filter( 'pre_get_document_title', [ $this, 'pre_get_document_title_filter' ], 20 );
 		add_action( 'template_redirect', [ $this, 'ocp_page' ] );
 		add_action( 'wp_footer', [ $this, 'ocp_footer' ] );
+		add_action( 'save_post', [ $this, 'purge_cache' ], 10, 3 );
 	}
 
 	/**
@@ -140,6 +142,18 @@ class Main {
 	 */
 	public function ocp_footer(): void {
 		$this->show_ocp_products();
+	}
+
+	/**
+	 * Purge cache.
+	 * Fires once a post has been saved.
+	 *
+	 * @param int     $post_ID Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated.
+	 */
+	public function purge_cache( $post_ID, $post, $update ): void {
+		wp_cache_delete( self::CACHE_KEY, self::CACHE_GROUP );
 	}
 
 	/**
