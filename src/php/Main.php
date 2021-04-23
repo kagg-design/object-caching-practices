@@ -13,8 +13,15 @@ use WP_Query;
  * Class Main
  */
 class Main {
-	const CACHE_KEY = 'products';
-	const CACHE_GROUP       = 'ocp';
+	/**
+	 * Cache key.
+	 */
+	private const CACHE_KEY = 'products';
+
+	/**
+	 * Cache group.
+	 */
+	private const CACHE_GROUP = 'ocp';
 
 	/**
 	 * Init class.
