@@ -75,12 +75,14 @@ class Main {
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			'posts_per_page' => - 1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
 			'meta_query'     => [
 				'relation' => 'OR',
 				[
 					'key'     => 'total_sales',
-					'value'   => 100,
-					'compare' => '>',
+					'value'   => [ 100, 1000 ],
+					'compare' => 'BETWEEN',
 					'type'    => 'NUMERIC',
 				],
 				[
@@ -92,9 +94,9 @@ class Main {
 						'type'    => 'NUMERIC',
 					],
 					[
-						'key'     => '_regular_price',
+						'key'     => 'total_sales',
 						'value'   => 1000,
-						'compare' => '=',
+						'compare' => '>',
 						'type'    => 'NUMERIC',
 					],
 				],
