@@ -13,6 +13,8 @@ use WP_Query;
  * Class Main
  */
 class Main {
+	const CACHE_KEY = 'products';
+	const CACHE_GROUP       = 'ocp';
 
 	/**
 	 * Init class.
@@ -71,39 +73,46 @@ class Main {
 	 * Show ocp products.
 	 */
 	public function show_ocp_products(): void {
-		$args = [
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => - 1,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-			'meta_query'     => [
-				'relation' => 'OR',
-				[
-					'key'     => 'total_sales',
-					'value'   => [ 100, 1000 ],
-					'compare' => 'BETWEEN',
-					'type'    => 'NUMERIC',
-				],
-				[
-					'relation' => 'AND',
+		$found = false;
+		$query = wp_cache_get( self::CACHE_KEY, self::CACHE_GROUP, false, $found );
+
+		if ( ! $found ) {
+			$args = [
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => - 1,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				'meta_query'     => [
+					'relation' => 'OR',
 					[
-						'key'     => '_regular_price',
-						'value'   => [ 5, 15 ],
+						'key'     => 'total_sales',
+						'value'   => [ 100, 1000 ],
 						'compare' => 'BETWEEN',
 						'type'    => 'NUMERIC',
 					],
 					[
-						'key'     => 'total_sales',
-						'value'   => 1000,
-						'compare' => '>',
-						'type'    => 'NUMERIC',
+						'relation' => 'AND',
+						[
+							'key'     => '_regular_price',
+							'value'   => [ 5, 15 ],
+							'compare' => 'BETWEEN',
+							'type'    => 'NUMERIC',
+						],
+						[
+							'key'     => 'total_sales',
+							'value'   => 1000,
+							'compare' => '>',
+							'type'    => 'NUMERIC',
+						],
 					],
 				],
-			],
-		];
+			];
 
-		$query = new WP_Query( $args );
+			$query = new WP_Query( $args );
+
+			wp_cache_set( self::CACHE_KEY, $query, self::CACHE_GROUP );
+		}
 
 		if ( $query->have_posts() ) {
 			echo '--------<br>';
