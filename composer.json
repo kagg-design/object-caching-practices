@@ -1,0 +1,38 @@
+{
+	"name": "kagg-design/ocp",
+	"type": "wordpress-plugin",
+	"description": "Object Caching Practices Demo Plugin",
+	"license": "GPL-2.0",
+	"keywords": [
+		"object cache",
+		"demo"
+	],
+	"homepage": "https://kagg.eu/en/",
+	"authors": [
+		{
+			"name": "KAGG Design",
+			"email": "info@kagg.eu",
+			"homepage": "https://kagg.eu/en/"
+		}
+	],
+	"support": {
+		"issues": "https://kagg.eu/en/"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"composer/installers": "^1.9"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-latest",
+		"squizlabs/php_codesniffer": "^3.5",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"wp-coding-standards/wpcs": "^2.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"KAGG\\OCP\\": "src/php/"
+		}
+	}
+}

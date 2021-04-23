@@ -1,0 +1,10 @@
+/vendor/
+
+!composer.lock
+*.lock
+*.sql
+*.tar.gz
+*.zip
+.DS_Store
+.idea/
+Thumbs.db
