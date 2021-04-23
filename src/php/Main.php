@@ -18,8 +18,24 @@ class Main {
 	 * Init class.
 	 */
 	public function init(): void {
+		add_filter( 'pre_get_document_title', [ $this, 'pre_get_document_title_filter' ], 20 );
 		add_action( 'template_redirect', [ $this, 'ocp_page' ] );
 		add_action( 'wp_footer', [ $this, 'ocp_footer' ] );
+	}
+
+	/**
+	 * Filters the document title before it is generated.
+	 *
+	 * @param string $title Page title.
+	 *
+	 * @return string
+	 */
+	public function pre_get_document_title_filter( string $title ): string {
+		if ( $this->is_ocp_page() ) {
+			return 'Object Caching Practices Demo';
+		}
+
+		return $title;
 	}
 
 	/**
