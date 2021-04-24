@@ -18,6 +18,11 @@ class API {
 	private const END_POINT_REMOTE = 'https://miusage.com/v1/challenge/1/';
 
 	/**
+	 * Transient name.
+	 */
+	private const TRANSIENT = 'ocp-api';
+
+	/**
 	 * Get items form remote server.
 	 *
 	 * @return array
@@ -25,8 +30,13 @@ class API {
 	 * @throws \JsonException JsonException.
 	 */
 	public function get_items(): array {
-		$response = wp_remote_get( self::END_POINT_REMOTE );
+		$items = get_transient( self::TRANSIENT );
+		if ( ! $items ) {
+			$response = wp_remote_get( self::END_POINT_REMOTE );
+			$items    = json_decode( $response['body'], true, 512, JSON_THROW_ON_ERROR );
+			set_transient( self::TRANSIENT, $items, 10 );
+		}
 
-		return json_decode( $response['body'], true, 512, JSON_THROW_ON_ERROR );
+		return $items;
 	}
 }
