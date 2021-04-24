@@ -25,6 +25,22 @@ class Main {
 	private const CACHE_GROUP = 'ocp';
 
 	/**
+	 * API instance.
+	 *
+	 * @var API
+	 */
+	private $api;
+
+	/**
+	 * Main constructor.
+	 *
+	 * @param API $api API instance.
+	 */
+	public function __construct( $api ) {
+		$this->api = $api;
+	}
+
+	/**
 	 * Init class.
 	 */
 	public function init(): void {
@@ -73,6 +89,7 @@ class Main {
 		if ( ! is_admin() && $this->is_ocp_page() ) {
 			get_header();
 			$this->show_ocp_products();
+			$this->show_remote_items();
 			get_footer();
 			$this->php_exit();
 		}
@@ -133,8 +150,37 @@ class Main {
 				<?php
 			}
 			wp_reset_postdata();
-			echo '<br>--------';
+			echo '--------<br>';
 		}
+	}
+
+	/**
+	 * Show remote items.
+	 */
+	public function show_remote_items(): void {
+		$items = $this->api->get_items();
+		$data  = $items['data'];
+
+		echo '<table>';
+		echo '<caption>' . esc_html( $items['title'] ) . '</caption>';
+
+		echo '<thead>';
+		foreach ( $data['headers'] as $header ) {
+			echo '<th>' . esc_html( $header ) . '</th>';
+		}
+		echo '</thead>';
+
+		echo '<tbody>';
+		foreach ( $data['rows'] as $row ) {
+			echo '<tr>';
+			foreach ( $row as $item ) {
+				echo '<td>' . esc_html( $item ) . '</td>';
+			}
+			echo '</tr>';
+		}
+		echo '<tbody>';
+
+		echo '</table>';
 	}
 
 	/**
@@ -142,6 +188,7 @@ class Main {
 	 */
 	public function ocp_footer(): void {
 		$this->show_ocp_products();
+		$this->show_remote_items();
 	}
 
 	/**

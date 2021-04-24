@@ -58,4 +58,4 @@ define( 'OCP_FILE', __FILE__ );
  */
 require_once constant( 'OCP_PATH' ) . '/vendor/autoload.php';
 
-( new Main() )->init();
+( new Main( ( new API() ) ) )->init();
